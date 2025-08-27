@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url("loginimg/Malaysia.jpg") no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      display: flex;
+      width: 900px;
+      height: 500px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    /* Left Side */
+    .left {
+      flex: 1;
+      background: linear-gradient(to bottom right, darkblue, navy);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 50px;
+    }
+
+    .left h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .left p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      opacity: 0.9;
+    }
+
+    /* Right Side */
+    .right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .box h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 25px;
+      background: darkblue;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: navy;
+    }
+
+    .link {
+      display: block;
+      margin-top: 15px;
+      font-size: 14px;
+      text-decoration: none;
+      color: darkblue;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    #errorMsg {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Left side -->
+    <div class="left">
+      <h1>Welcome Back!</h1>
+      <p>
+        Log in to continue exploring delicious Malaysian street food,  
+        save your favorites, and discover new dishes from every state.
+      </p>
+    </div>
+
+    <!-- Right side (login form) -->
+    <div class="right">
+      <div class="box">
+        <h2>Login</h2>
+        <form id="loginForm">
+          <input type="text" id="username" placeholder="Enter Username" required>
+          <input type="password" id="password" placeholder="Enter Password" required>
+          <button type="submit" class="btn">Login</button>
+        </form>
+        <p id="errorMsg"></p>
+        <a href="signup.html" class="link">Don’t have an account? Sign up here</a>
+      </div>
+    </div>
+  </div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorMsg = document.getElementById("errorMsg");
+
+  let users = JSON.parse(localStorage.getItem("users")) || {};
+
+  if(users[username] && users[username] === password){
+    localStorage.setItem("loggedInUser", username);
+    sessionStorage.setItem("loggedInUser", username);
+    document.cookie = "username=" + username + "; path=/";
+    window.location.href = "index.html";
+  } else {
+    errorMsg.textContent = "Invalid username or password.";
+  }
+});
+</script>
+</body>
+</html>

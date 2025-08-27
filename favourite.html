@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Favorites</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #c9c9c9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-weight: bold;
+      color: #1e2a36;
+    }
+    .fav-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+      overflow: hidden;
+    }
+    .fav-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+    .fav-card img {
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 1px solid #ddd;
+    }
+    .card-body {
+      text-align: center;
+    }
+    .remove-btn {
+      margin-top: 10px;
+    }
+    .no-fav {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #6c757d;
+      margin-top: 40px;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container my-5">
+    <h1>My Favourite Foods</h1>
+    <div id="favList" class="row g-4"></div>
+    <div class="text-center mt-4">
+      <a href="index.html" class="btn btn-secondary">⬅ Back Home</a>
+    </div>
+  </div>
+
+  <script>
+    function loadFavorites() {
+      let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      let list = document.getElementById("favList");
+      list.innerHTML = "";
+
+      if (favorites.length === 0) {
+        list.innerHTML = "<p class='no-fav'>No favorites saved yet.</p>";
+        return;
+      }
+
+      favorites.forEach((food, index) => {
+        let col = document.createElement("div");
+        col.className = "col-md-4 col-sm-6";
+
+        col.innerHTML = `
+          <div class="card fav-card">
+            <img src="${food.image}" alt="${food.name}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">${food.name}</h5>
+              <button class="btn btn-danger btn-sm remove-btn" data-index="${index}">Remove</button>
+            </div>
+          </div>
+        `;
+        list.appendChild(col);
+      });
+
+      // Add remove button 
+      document.querySelectorAll(".remove-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+          let idx = this.getAttribute("data-index");
+          favorites.splice(idx, 1);
+          localStorage.setItem("favorites", JSON.stringify(favorites));
+          loadFavorites();
+        });
+      });
+    }
+
+    // Run when page loads
+    document.addEventListener("DOMContentLoaded", loadFavorites);
+  </script>
+</body>
+</html>
